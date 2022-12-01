@@ -1,0 +1,35 @@
+---
+title: "HW3"
+author: "Zhenning Zhang"
+date: '2022-12-01'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Question 1
+
+Global level git config:
+C:/Users/zzn/.gitconfig
+(where zzn is my username in English)
+
+Local level git config:
+(It's in git repo's .git folder)
+
+And I am using a Windows machine.
+
+(Since I already have an account in my global gitconfig, so I'm no going to override it with UMich account.)
+
+```{r}
+system("cat C:/Users/张振宁/.gitconfig")
+```
+
+Commands in Git Bash:
+
+pwd
+cd Downloads/STATS506/hw3
+
+
+
