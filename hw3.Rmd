@@ -54,21 +54,28 @@ readLines(con, n = 1)
 
 ```{r}
 library(data.table)
-```
 
-```{r}
 # but fread is simply too OP
 varnames = c("State", "County Code", "Employee Size (5) - Location", "Sales Volume (9) - Location", "Census Tract")
 
 readdata = function(n1=1, n2=10) {
   data = fread(filepath, nrows=n2, select=varnames)
-  if(n1==1)
-    return(data)
-  return(data[-(1:(n1-1)),])
+  colnames(data) = c("state", "county_code", "employee_size_location", "sales_volume_location", "census_tract")
+  if(n1!=1)
+    data = data[-(1:(n1-1)),]
+  return(data[complete.cases(data),])
 }
 ```
 
+Question 3
 
+```{r}
+AL = readdata(1,300000)
+
+library(tidyverse)
+
+df1 = AL %>% group_by(census_tract) %>% summarise(employee_size = sum(employee_size_location), sales_volume = sum(sales_volume_location)) 
+```
 
 
 
