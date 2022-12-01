@@ -58,6 +58,7 @@ library(data.table)
 # but fread is simply too OP
 varnames = c("State", "County Code", "Employee Size (5) - Location", "Sales Volume (9) - Location", "Census Tract")
 
+# There is not a lot of variables, so just hard coding
 readdata = function(n1=1, n2=10) {
   data = fread(filepath, nrows=n2, select=varnames)
   colnames(data) = c("state", "county_code", "employee_size_location", "sales_volume_location", "census_tract")
@@ -77,5 +78,35 @@ library(tidyverse)
 df1 = AL %>% group_by(census_tract) %>% summarise(employee_size = sum(employee_size_location), sales_volume = sum(sales_volume_location)) 
 ```
 
+Question 4
 
+SET GLOBAL local_infile=1;
+
+CREATE DATABASE Hw3db;
+
+CREATE TABLE df1 (
+	census_tract int primary key,
+    employee_size int,
+    sales_volume int
+);
+
+```{r}
+library(RMySQL)
+
+myDB = dbConnect(MySQL(),user="root",password="ZhenningZhang20011030#",host="localhost",port=3306,db="Hw3db")
+
+dbWriteTable(myDB,name="df1",value=df1,append = TRUE,row.names = FALSE)
+```
+
+Question 5
+
+```{r}
+fetch(dbSendQuery(myDB,"SELECT * FROM df1 ORDER BY sales_volume DESC LIMIT 10"))
+```
+
+Question 6
+
+git add hw3.Rmd
+git commit
+git push -u origin main
 
