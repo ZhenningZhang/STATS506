@@ -46,23 +46,26 @@ system("cat .gitignore")
 Question 2
 
 ```{r}
-# How I technically can read it line by line, ... but fread is really powerful
+# How I technically can read it line by line
 filepath = "hw3data/2020_Business_Academic_QCQ.txt"
 con = file(filepath, "r")
 readLines(con, n = 1)
 ```
-
 
 ```{r}
 library(data.table)
 ```
 
 ```{r}
-varnames = c("State", "County Code", "Employee Size (5) - Location", "Sales Volume (9) - Location", "Census Tract" )
+# but fread is simply too OP
+varnames = c("State", "County Code", "Employee Size (5) - Location", "Sales Volume (9) - Location", "Census Tract")
 
-data = fread(filepath, nrows=10, select=varnames)
-
-data
+readdata = function(n1=1, n2=10) {
+  data = fread(filepath, nrows=n2, select=varnames)
+  if(n1==1)
+    return(data)
+  return(data[-(1:(n1-1)),])
+}
 ```
 
 
