@@ -30,6 +30,18 @@ Commands in Git Bash:
 
 pwd
 cd Downloads/STATS506/hw3
+git init
+git add hw3.Rmd
+git commit
+
+git remote add origin https://github.com/ZhenningZhang/STATS506.git
+git branch -M main
+git push -u origin main
+
+
+
+
+
 
 
 
