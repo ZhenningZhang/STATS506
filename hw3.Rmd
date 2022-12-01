@@ -110,3 +110,13 @@ git add hw3.Rmd
 git commit
 git push -u origin main
 
+git branch newbranch
+git switch newbranch
+git branch -a
+
+(what is remotes/origin/maim here?)
+git add hw3.Rmd
+git commit
+git push -u origin newbranch
+
+
