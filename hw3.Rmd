@@ -93,7 +93,7 @@ CREATE TABLE df1 (
 ```{r}
 library(RMySQL)
 
-myDB = dbConnect(MySQL(),user="root",password="ZhenningZhang20011030#",host="localhost",port=3306,db="Hw3db")
+myDB = dbConnect(MySQL(),user="root",password=Sys.getenv("MySQLpassword"),host="localhost",port=3306,db="Hw3db")
 
 dbWriteTable(myDB,name="df1",value=df1,append = TRUE,row.names = FALSE)
 ```
@@ -147,6 +147,18 @@ ALTER TABLE df2
 ADD PRIMARY KEY (census_tract);
 
 Question 9
+
+git add hw3.Rmd
+git commit
+git push -u origin newbranch
+
+git log
+
+Then it shows Author, Date, and Comment of historial commit.
+HEAD -> newbranch means the current working branch (i.e. active branch) is "newbranch."
+
+
+
 
 
 
