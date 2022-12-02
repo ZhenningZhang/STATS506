@@ -9,6 +9,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+https://github.com/ZhenningZhang/STATS506
+
 Question 1
 
 Global level git config:
@@ -95,7 +97,7 @@ library(RMySQL)
 
 myDB = dbConnect(MySQL(),user="root",password=Sys.getenv("MySQLpassword"),host="localhost",port=3306,db="Hw3db")
 
-dbWriteTable(myDB,name="df1",value=df1,append = TRUE,row.names = FALSE)
+# dbWriteTable(myDB,name="df1",value=df1,append = TRUE,row.names = FALSE)
 ```
 
 Question 5
@@ -140,7 +142,7 @@ df2 = data2 %>% group_by(census_tract) %>% summarise(income = sum(income), wealt
 Question 8
 
 ```{r}
-dbWriteTable(myDB,name="df2",value=df2,row.names = FALSE)
+# dbWriteTable(myDB,name="df2",value=df2,row.names = FALSE)
 ```
 
 ALTER TABLE df2
@@ -191,7 +193,7 @@ df3 = df3 %>% mutate(white_per = white/total)
 ```
 
 ```{r}
-dbWriteTable(myDB,name="df3",value=df3,row.names = FALSE)
+# dbWriteTable(myDB,name="df3",value=df3,row.names = FALSE)
 ```
 
 Question 11
