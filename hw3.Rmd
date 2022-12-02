@@ -71,11 +71,11 @@ readdata = function(n1=1, n2=10) {
 Question 3
 
 ```{r}
-AL = readdata(1,300000)
+AL = readdata(1,1000000)
 
 library(tidyverse)
 
-df1 = AL %>% group_by(census_tract) %>% summarise(employee_size = sum(employee_size_location), sales_volume = sum(sales_volume_location)) 
+df1 = AL %>% filter(state=="AL") %>% group_by(census_tract) %>% summarise(employee_size = sum(employee_size_location), sales_volume = sum(sales_volume_location)) 
 ```
 
 Question 4
@@ -140,11 +140,12 @@ df2 = data2 %>% group_by(census_tract) %>% summarise(income = sum(income), wealt
 Question 8
 
 ```{r}
-dbWriteTable(myDB,name="df2",value=df2)
+dbWriteTable(myDB,name="df2",value=df2,row.names = FALSE)
 ```
 
 ALTER TABLE df2
 ADD PRIMARY KEY (census_tract);
+
 
 Question 9
 
@@ -158,8 +159,55 @@ Then it shows Author, Date, and Comment of historial commit.
 HEAD -> newbranch means the current working branch (i.e. active branch) is "newbranch."
 
 
+Question 10
+
+```{r}
+library(tidycensus)
+Sys.setenv("CENSUS_API_KEY"="b63eea5d1b9fe7ddc0e0b8453dc02ee291ca9101")
+```
+
+```{r}
+data = get_decennial(geography = 'tract', state = '01', variables = c('P008001'))
+white = get_decennial(geography = 'tract', state = '01', variables = c('P008003'))[,4]
+black = get_decennial(geography = 'tract', state = '01', variables = c('P008004'))[,4]
+asian = get_decennial(geography = 'tract', state = '01', variables = c('P008006'))[,4]
+
+data = cbind(data, white, black, asian)
+data = data[,-3]
+colnames(data)[3:6] = c("total","white","black","asian")
+rm(white, black, asian)
+```
+
+```{r}
+get_decennial(geography = 'tract', state = '01', variables = c('P008001'))
+```
 
 
+```{r}
+# But tbh df3 does not match df1 data in terms of population..
+data = data %>% mutate(census_tract = str_remove(substr(GEOID,6,9), "^0+"))
+df3 = data %>% group_by(census_tract) %>% summarise(total = sum(total), white = sum(white))
+df3 = df3 %>% mutate(white_per = white/total)
+```
 
+```{r}
+dbWriteTable(myDB,name="df3",value=df3,row.names = FALSE)
+```
+
+Question 11
+
+I want to know the education information and rural / city information.
+
+```{r}
+# I don't know why, eventually there's only 18 records left
+df4 = fetch(dbSendQuery(myDB,"SELECT * FROM df1
+JOIN df2 ON df1.census_tract = df2.census_tract
+JOIN df3 ON df1.census_tract = df3.census_tract;"))
+df4 = df4[,-c(1,4,8)]
+```
+
+git add hw3.Rmd
+git commit
+git push -u origin newbranch
 
 
