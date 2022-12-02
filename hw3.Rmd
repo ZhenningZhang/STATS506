@@ -206,8 +206,55 @@ JOIN df3 ON df1.census_tract = df3.census_tract;"))
 df4 = df4[,-c(1,4,8)]
 ```
 
+Question 12
+
 git add hw3.Rmd
 git commit
 git push -u origin newbranch
 
+git checkout main
+git merge newbranch
+git push -u origin main
+
+But I did not really see anything indicate merging in git log..
+
+To go back:
+
+git checkout <commit id>
+or git restore --source <commit id> <file name>
+
+
+Question 13
+
+From the model, there is no enough evidence to identify racial bias on income per worker. But it can affect by the small sample size, lack of other variables, or model specification errors.
+
+```{r}
+summary(lm(data = df4, log(income/employee_size) ~ log(home_value/employee_size) + log(wealth/employee_size) + white_per))
+```
+
+
+Question 2
+
+
+Question 1
+
+A core is a part of a processor which does computations. Whereas a node is one of several nodes inside a server, and a node is where CPUs and other components such as memory are installed.
+
+Login node provides interface to the cluster, so users can login to the cluster, modify scripts, and launch jobs.
+
+Compute node is a set of computing resources (CPU, GPU, RAM, ...) to be consumed for virtual machines. 
+
+
+Question 2
+
+srun --nodes=1 --ntasks=1 --cpus-per-task=2 --mem=32G --time=03:00:00 /bin/bash
+
+
+Question 3
+
+My scratch path is /scratch/stats506s001f22_class_root/stats506s001f22_class/zzn
+
+ln -s /scratch/stats506s001f22_class_root/stats506s001f22_class/zzn /home/zzn/'DATASCI 506'/sc
+
+It will do nothing to the original directory
 
