@@ -370,6 +370,7 @@ pre code {
 </div>
 
 
+<p><a href="https://github.com/ZhenningZhang/STATS506" class="uri">https://github.com/ZhenningZhang/STATS506</a></p>
 <p>Question 1</p>
 <p>Global level git config: C:/Users/zzn/.gitconfig (where zzn is my
 username in English)</p>
@@ -404,7 +405,16 @@ readdata = function(n1=1, n2=10) {
   if(n1!=1)
     data = data[-(1:(n1-1)),]
   return(data[complete.cases(data),])
-}</code></pre>
+}
+
+readdata(2,7)</code></pre>
+<pre><code>##    state county_code employee_size_location sales_volume_location census_tract
+## 1:    AL          73                      3                   165        12401
+## 2:    AL          73                      6                  1793          800
+## 3:    AL          73                      3                   586         4500
+## 4:    AL          73                     15                   738        10804
+## 5:    AL          73                      2                   297        14404
+## 6:    AL          73                      6                   792        12802</code></pre>
 <p>Question 3</p>
 <pre class="r"><code>AL = readdata(1,1000000)
 
@@ -425,7 +435,18 @@ library(tidyverse)</code></pre>
 ## ✖ dplyr::lag()       masks stats::lag()
 ## ✖ dplyr::last()      masks data.table::last()
 ## ✖ purrr::transpose() masks data.table::transpose()</code></pre>
-<pre class="r"><code>df1 = AL %&gt;% filter(state==&quot;AL&quot;) %&gt;% group_by(census_tract) %&gt;% summarise(employee_size = sum(employee_size_location), sales_volume = sum(sales_volume_location)) </code></pre>
+<pre class="r"><code>df1 = AL %&gt;% filter(state==&quot;AL&quot;) %&gt;% group_by(census_tract) %&gt;% summarise(employee_size = sum(employee_size_location), sales_volume = sum(sales_volume_location))
+
+head(df1)</code></pre>
+<pre><code>## # A tibble: 6 × 3
+##   census_tract employee_size sales_volume
+##          &lt;int&gt;         &lt;int&gt;        &lt;int&gt;
+## 1          100         22875      2298365
+## 2          200         28980      2850930
+## 3          201          4945      3901304
+## 4          202           794       103206
+## 5          300          9058      2485748
+## 6          301           296        32520</code></pre>
 <p>Question 4</p>
 <p>SET GLOBAL local_infile=1;</p>
 <p>CREATE DATABASE Hw3db;</p>
@@ -464,7 +485,18 @@ data2 = fread(&quot;hw3data/AL.csv&quot;,select=varnames)
 colnames(data2) = actualnames
 data2 = data2 %&gt;% filter(home_value!=0)</code></pre>
 <pre class="r"><code># I&#39;m not sure if it is a good practice just to use same variable names
-df2 = data2 %&gt;% group_by(census_tract) %&gt;% summarise(income = sum(income), wealth = sum(wealth), home_value = sum(home_value))</code></pre>
+df2 = data2 %&gt;% group_by(census_tract) %&gt;% summarise(income = sum(income), wealth = sum(wealth), home_value = sum(home_value))
+
+head(df2)</code></pre>
+<pre><code>## # A tibble: 6 × 4
+##   census_tract income   wealth home_value
+##          &lt;int&gt;  &lt;int&gt;    &lt;int&gt;      &lt;int&gt;
+## 1          100 171167  6216780     636562
+## 2          200 442392 11280382    1074761
+## 3          201   3729   247423      38215
+## 4          202  13769  1017330      72386
+## 5          300 254939  7595647     837529
+## 6          301  32786  1966354     180766</code></pre>
 <p>Question 8</p>
 <pre class="r"><code># dbWriteTable(myDB,name=&quot;df2&quot;,value=df2,row.names = FALSE)</code></pre>
 <p>ALTER TABLE df2 ADD PRIMARY KEY (census_tract);</p>
@@ -514,7 +546,18 @@ rm(white, black, asian)</code></pre>
 <pre class="r"><code># But tbh df3 does not match df1 data in terms of population..
 data = data %&gt;% mutate(census_tract = str_remove(substr(GEOID,6,9), &quot;^0+&quot;))
 df3 = data %&gt;% group_by(census_tract) %&gt;% summarise(total = sum(total), white = sum(white))
-df3 = df3 %&gt;% mutate(white_per = white/total)</code></pre>
+df3 = df3 %&gt;% mutate(white_per = white/total)
+
+head(df3)</code></pre>
+<pre><code>## # A tibble: 6 × 4
+##   census_tract total white white_per
+##   &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+## 1 1            12266  6407     0.522
+## 2 10           18797 11199     0.596
+## 3 100          33136 24393     0.736
+## 4 101          44528 35390     0.795
+## 5 102          47872 38464     0.803
+## 6 103          56326 38813     0.689</code></pre>
 <pre class="r"><code># dbWriteTable(myDB,name=&quot;df3&quot;,value=df3,row.names = FALSE)</code></pre>
 <p>Question 11</p>
 <p>I want to know the education information and rural / city
@@ -523,7 +566,16 @@ information.</p>
 df4 = fetch(dbSendQuery(myDB,&quot;SELECT * FROM df1
 JOIN df2 ON df1.census_tract = df2.census_tract
 JOIN df3 ON df1.census_tract = df3.census_tract;&quot;))
-df4 = df4[,-c(1,4,8)]</code></pre>
+df4 = df4[,-c(1,4,8)]
+
+head(df4)</code></pre>
+<pre><code>##   employee_size sales_volume income   wealth home_value total white white_per
+## 1         22875      2298365 171167  6216780     636562 33136 24393 0.7361480
+## 2         28980      2850930 442392 11280382    1074761  6111  5043 0.8252332
+## 3          4945      3901304   3729   247423      38215 27184 23624 0.8690406
+## 4           794       103206  13769  1017330      72386 24774 20451 0.8255025
+## 5          9058      2485748 254939  7595647     837529  4689  4061 0.8660695
+## 6           296        32520  32786  1966354     180766 25554 19890 0.7783517</code></pre>
 <p>Question 12</p>
 <p>git add hw3.Rmd git commit git push -u origin newbranch</p>
 <p>git checkout main git merge newbranch git push -u origin main</p>
