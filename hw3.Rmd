@@ -120,3 +120,34 @@ git commit
 git push -u origin newbranch
 (and what is origin means?)
 
+
+Question 7
+
+```{r}
+varnames = c("FIELD19", "FIELD20", "FIELD22", "FIELD45", "FIELD64", "FIELD65")
+actualnames = c("wealth","income","home_value","state","county_code","census_tract")
+
+data2 = fread("hw3data/AL.csv",select=varnames)
+colnames(data2) = actualnames
+data2 = data2 %>% filter(home_value!=0)
+```
+
+```{r}
+# I'm not sure if it is a good practice just to use same variable names
+df2 = data2 %>% group_by(census_tract) %>% summarise(income = sum(income), wealth = sum(wealth), home_value = sum(home_value))
+```
+
+Question 8
+
+```{r}
+dbWriteTable(myDB,name="df2",value=df2)
+```
+
+ALTER TABLE df2
+ADD PRIMARY KEY (census_tract);
+
+Question 9
+
+
+
+
